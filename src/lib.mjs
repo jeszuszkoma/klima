@@ -46,10 +46,3 @@ export const icon = (name, cls = "icon") =>
 // Márkajel: légáramlást idéző három vonal egy lekerekített négyzetben.
 export const brandMark = (cls = "brand-mark") =>
   `<svg class="${cls}" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><rect width="32" height="32" rx="8" fill="#0F2238"/><path d="M8 11h16M8 16h11M8 21h6" stroke="#5CC8E0" stroke-width="2.6" stroke-linecap="round"/></svg>`;
-
-// Unsplash kép reszponzív srcset-tel (a CDN automatikusan WebP/AVIF formátumot ad).
-export const unsplash = (id, w, h, q = 70) =>
-  `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&h=${h}&q=${q}`;
-
-export const srcset = (id, sizes, ratio) =>
-  sizes.map((w) => `${unsplash(id, w, Math.round(w * ratio))} ${w}w`).join(", ");

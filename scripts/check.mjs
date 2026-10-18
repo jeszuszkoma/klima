@@ -55,8 +55,12 @@ if (site.phone) {
   if (!/^\+36 \d{1,2} \d{3} \d{3,4}$/.test(site.phone)) warns.push(`site.json: szokatlan telefonszám-formátum: ${site.phone}`);
 }
 
-// Űrlap: soha ne legyen előre látható sikerüzenet.
-if (!/class="form-success" hidden/.test(docs["index.html"])) errors.push("index.html: a sikerüzenet nincs alapból elrejtve");
+// Ajánlatkérés csak telefonon: nincs űrlap és nincs e-mail-cím az oldalakon (az impresszum kivételével).
+for (const [file, html] of Object.entries(docs)) {
+  if (/<form[\s>]/.test(html)) errors.push(`${file}: űrlap van az oldalon (csak telefonos ajánlatkérés kell)`);
+  if (file !== "impresszum.html" && /href="mailto:/.test(html)) errors.push(`${file}: e-mail-cím az oldalon`);
+}
+if (site.phone && (docs["index.html"].match(/href="tel:/g) || []).length < 4) errors.push("index.html: kevés hívás gomb");
 
 const placeholders = Object.values(docs).reduce((n, h) => n + (h.match(/class="ph"/g) || []).length, 0);
 console.log(`${pages.length} oldal ellenőrizve. Kitöltendő jelölések: ${placeholders} db.`);

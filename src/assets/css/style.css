@@ -599,3 +599,23 @@ h3 { font-size: 1.3rem; line-height: 1.2; letter-spacing: -0.01em; }
 .install-details summary { cursor: pointer; color: var(--blue); font-weight: 600; }
 .install-details ul { margin: 10px 0 0; padding-left: 20px; color: var(--ink-2); display: grid; gap: 4px; }
 .install-details p { margin: 10px 0 0 !important; }
+
+/* ---------- kapcsolat: csak telefon ---------- */
+.contact-wrap { max-width: 760px; }
+.contact-lead { margin: 16px 0 0; color: var(--muted); font-size: 1.15rem; max-width: 52ch; }
+.call-card-big { padding: 24px 26px; }
+.call-card-big .call-number { font-size: clamp(1.8rem, 1.4rem + 2vw, 2.6rem); }
+.mobile-bar .btn { flex: 1; }
+
+/* ---------- hero tájékoztató doboz ---------- */
+.hero-panel { display: grid; gap: 18px; padding: clamp(20px, 2.6vw, 30px); border-radius: var(--r-lg); background: var(--surface); box-shadow: inset 0 0 0 1px var(--line), var(--shadow); }
+.hero-product { width: 100%; aspect-ratio: 4 / 3; object-fit: contain; background: #fff; border-radius: var(--r-md); }
+.hero-facts { margin: 0; display: grid; }
+.hero-facts div { display: grid; grid-template-columns: 110px 1fr; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.hero-facts div:first-child { padding-top: 0; }
+.hero-facts dt { color: var(--muted); font-size: 0.95rem; padding-top: 2px; }
+.hero-facts dd { margin: 0; display: grid; }
+.hero-facts strong { font-family: var(--font-display); font-size: 1.35rem; letter-spacing: -0.01em; }
+.hero-facts span { color: var(--muted); font-size: 0.9rem; }
+
+@media (max-width: 639px) { .hero-product { aspect-ratio: 16 / 9; } }

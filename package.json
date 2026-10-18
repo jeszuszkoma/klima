@@ -7,7 +7,6 @@
     "images": "node scripts/fetch-images.mjs",
     "build": "node scripts/build.mjs",
     "check": "node scripts/check.mjs",
-    "test": "node --test tests/*.test.mjs",
     "smoke": "node tests/smoke.mjs",
     "preview": "npx http-server dist -p 4321 -c-1"
   },

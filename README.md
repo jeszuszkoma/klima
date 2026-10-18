@@ -17,10 +17,8 @@ public/                      # favicon, ikonok
 scripts/build.mjs            # statikus build -> dist/
 scripts/fetch-images.mjs     # termékfotók letöltése saját tárhelyre (CI-ban fut)
 scripts/check.mjs            # statikus ellenőrzés (linkek, horgonyok, alt, h1, magyar szöveg)
-tests/worker.test.mjs        # az ajánlatkérő végpont egységtesztjei
 tests/smoke.mjs              # böngészős füstteszt (Playwright + Chrome)
-worker/index.js              # Cloudflare Worker: oldal kiszolgálása + POST /api/ajanlatkeres
-wrangler.toml                # Worker beállítások
+wrangler.toml                # opcionális Cloudflare kiszolgálás saját domainhez (csak statikus fájlok)
 .github/workflows/pages.yml  # build + ellenőrzés + közzététel GitHub Pages-re
 ```
 
@@ -31,7 +29,6 @@ Nincs külső futásidejű függőség és nincs keretrendszer: sima HTML, CSS �
 ```bash
 npm run build     # dist/ előállítása, a végén kiírja a még kitöltendő adatokat
 npm run check     # statikus ellenőrzés
-npm test          # Worker egységtesztek
 npm run smoke     # böngészős füstteszt (mobil, tablet, asztali)
 npm run preview   # helyi előnézet: http://localhost:4321
 ```
@@ -43,4 +40,4 @@ npm run preview   # helyi előnézet: http://localhost:4321
 - **Klímaárak:** a `data/products-raw/*.json` fájlok a gree.hu (klimawebaruhaz.com) és a syen.hu oldaláról származnak. A dátum a `productPrices.fetchedAt` mezőben. A Gree nettó árakat a build 27% áfával bruttósítja.
 - **Árlista (szolgáltatások):** `prices.items` – ha nem üres, külön „Árak” szakasz jelenik meg a főoldalon.
 
-Nincs csevegőrobot, foglalási rendszer, fiók vagy webshop – ezeket a megrendelő nem kérte.
+Nincs csevegőrobot, űrlap, e-mail, foglalási rendszer, fiók vagy webshop: az ajánlatkérés telefonon történik.

@@ -1,7 +1,7 @@
 // Böngészős füstteszt (Playwright + Chrome) a kész dist/ mappán.
 // Futtatás: node tests/smoke.mjs  [--shots <mappa>]
 // Ellenőrzi: oldalak betöltése, helyi fájlok (404), konzolhibák, vízszintes túlcsordulás,
-// mobil menü, CTA előválasztás, űrlap validáció, becsületes hiba/siker állapot, adatlap -> űrlap előtöltés.
+// mobil menü, hívás gombok (csak telefonos ajánlatkérés), alapszerelési ár, adatlap.
 import { createServer } from "node:http";
 import { readFileSync, existsSync, mkdirSync, statSync } from "node:fs";
 import { join, extname, dirname } from "node:path";
@@ -89,6 +89,7 @@ try {
     await page.locator('#menu a[href="#kapcsolat"]').click();
     ok("mobil menü: linkre kattintva bezárul", (await toggle.getAttribute("aria-expanded")) === "false");
     ok("mobil alsó sáv: hívás gomb tel: linkkel", (await page.locator(".mobile-bar a[href^='tel:']").count()) === 1);
+    ok("mobil alsó sáv: nincs űrlapra mutató gomb", (await page.locator(".mobile-bar a[href*='#']").count()) === 0);
     await page.evaluate(() => window.scrollTo(0, 0));
     await page.waitForTimeout(400);
     ok("mobil alsó sáv: a hero gombjainál rejtve (nem takar)", await page.locator(".mobile-bar").evaluate((el) => el.classList.contains("is-hidden")));
@@ -98,78 +99,35 @@ try {
     await ctx.close();
   }
 
-  // 3) CTA előválasztás + űrlap validáció + becsületes hibaállapot (nincs végpont)
+  // 3) Ajánlatkérés csak telefonon: minden CTA hívást indít, nincs űrlap és e-mail
+  const site = JSON.parse(readFileSync(join(root, "data", "site.json"), "utf8"));
+  const tel = "tel:" + String(site.phone || "").replace(/[^\d+]/g, "");
   {
     const { ctx, page } = await newPage(viewports.asztali);
     await page.goto(base, { waitUntil: "load" });
-    await page.locator('.fork-door[data-tipus="csak-telepites"]').click();
-    ok("CTA: „Csak telepítést szeretnék” előválasztja a típust", await page.locator('input[value="csak-telepites"]').isChecked());
-    ok("márka mező felirata a saját készülékhez igazodik", /készüléked/.test(await page.locator("[data-marka-label]").innerText()));
-
-    await page.locator('#ajanlat-form input[value="klima-telepites"]').uncheck().catch(() => {});
-    await page.evaluate(() => document.querySelectorAll('input[name="tipus"]').forEach((r) => (r.checked = false)));
-    await page.locator("#ajanlat-form button[type=submit]").click();
-    const errs = await page.locator(".field-error:not([hidden])").count();
-    ok("üres űrlap: hibaüzenetek megjelennek", errs >= 4, `${errs} hiba`);
+    ok("nincs űrlap az oldalon", (await page.locator("form").count()) === 0);
     ok("nincs e-mail-cím az oldalon (mailto)", (await page.locator("a[href^='mailto:']").count()) === 0);
-    ok("alapszerelés szakasz: tartalom és további költségek", (await page.locator("#arak .ticks li").count()) >= 5 && (await page.locator("#arak .price-row").count()) >= 4);
-    ok("telefonszám a hirdetés szerint", (await page.locator("a[href='tel:+36703891409']").count()) > 0);
-    ok("üres űrlap: nincs sikerüzenet", await page.locator(".form-success").isHidden());
-    ok("üres űrlap: első hibás mezőre kerül a fókusz", await page.evaluate(() => document.activeElement?.name === "tipus"));
-
-    await page.locator('input[value="klima-telepites"]').check();
-    await page.fill("#nev", "Teszt Elek");
-    await page.fill("#telefon", "12");
-    await page.locator("#ajanlat-form button[type=submit]").click();
-    ok("hibás telefonszám: konkrét hibaüzenet", /telefonszámot/.test(await page.locator("#telefon-hiba").innerText()));
-    await page.fill("#telefon", "+36 30 123 4567");
-    ok("nincs e-mail mező az űrlapon", (await page.locator("#ajanlat-form input[type=email]").count()) === 0);
-    await page.check("#hozzajarulas");
-    await page.locator("#ajanlat-form button[type=submit]").click();
-    const status = page.locator(".form-status");
-    ok("végpont nélkül: egyértelmű hibaüzenet", !(await status.isHidden()) && /nincs bekapcsolva/.test(await status.innerText()));
-    ok("végpont nélkül: telefonszám felajánlva", (await status.locator("a[href^='tel:']").count()) === 1);
-    ok("végpont nélkül: NINCS hamis sikerüzenet", await page.locator(".form-success").isHidden());
+    ok("telefonszám a hirdetés szerint", (await page.locator(`a[href='${tel}']`).count()) > 0);
+    const forks = await page.locator(".fork-door").evaluateAll((els) => els.map((e) => e.getAttribute("href")));
+    ok("hero: mindkét gomb hívást indít", forks.length === 2 && forks.every((h) => h === tel), forks.join(", "));
+    const svc = await page.locator(".service .btn").evaluateAll((els) => els.map((e) => e.getAttribute("href")));
+    ok("szolgáltatás gombok hívást indítanak", svc.length === 2 && svc.every((h) => h === tel), svc.join(", "));
+    ok("fejléc gomb hívást indít", (await page.locator(".header-cta").getAttribute("href")) === tel);
+    ok("kapcsolat: nagy hívógomb", (await page.locator(`#kapcsolat a.call-card[href='${tel}']`).count()) === 1);
+    ok("alapszerelés szakasz: ár, tartalom és további költségek", /90\s000\sFt/.test(await page.locator(".install-head strong").innerText()) && (await page.locator("#arak .ticks li").count()) >= 5 && (await page.locator("#arak .price-row").count()) >= 4);
+    ok("csak telepítés: alapszerelési ár feltüntetve", /90\s000\sFt/.test(await page.locator("#csak-telepites").innerText()));
+    ok("sorozatkártyák: + alapszerelési ár összeggel", /\+\s?90\s000\sFt alapszerelési ár/.test(await page.locator(".series-card").first().innerText()));
     await ctx.close();
   }
 
-  // 4) Valós végpont szimulálása: siker csak ok:true válasznál, szerverhibánál hibaüzenet
-  for (const scenario of ["siker", "szerverhiba"]) {
-    const { ctx, page } = await newPage(viewports.mobil);
-    await page.route(base + "api/ajanlatkeres", (route) =>
-      scenario === "siker"
-        ? route.fulfill({ status: 200, contentType: "application/json", body: '{"ok":true}' })
-        : route.fulfill({ status: 503, contentType: "application/json", body: '{"ok":false,"error":"Az online ajánlatkérés jelenleg nem elérhető."}' })
-    );
-    await page.goto(base, { waitUntil: "load" });
-    await page.evaluate(() => document.getElementById("ajanlat-form").setAttribute("data-endpoint", "api/ajanlatkeres"));
-    await page.locator('input[value="altalanos"]').check();
-    await page.fill("#nev", "Teszt Elek");
-    await page.fill("#telefon", "06 30 123 4567");
-    await page.check("#hozzajarulas");
-    await page.locator("#ajanlat-form button[type=submit]").click();
-    if (scenario === "siker") {
-      await page.locator(".form-success").waitFor({ state: "visible", timeout: 5000 });
-      ok("végpont ok:true: sikerüzenet megjelenik", await page.locator(".form-success").isVisible());
-    } else {
-      await page.locator(".form-status").waitFor({ state: "visible", timeout: 5000 });
-      ok("végpont hiba: hibaüzenet, nincs siker", (await page.locator(".form-success").isHidden()) && /nem elérhető/.test(await page.locator(".form-status").innerText()));
-    }
-    await ctx.close();
-  }
-
-  // 5) Termékadatlap -> ajánlatkérés előtöltés
+  // 4) Termékadatlap: ár + alapszerelési ár, hívás gomb
   if (productPage) {
     const { ctx, page } = await newPage(viewports.mobil);
     await page.goto(base + productPage, { waitUntil: "load" });
-    const name = await page.locator("h1").innerText();
-    ok("adatlap: ár + alapszerelési ár jelölés", /Ft/.test(await page.locator(".price-now").innerText()) && /alapszerelési ár/.test(await page.locator(".price-install").innerText()));
+    ok("adatlap: ár + alapszerelési ár", /Ft/.test(await page.locator(".price-now").innerText()) && /alapszerelési ár: 90\s000\sFt/.test(await page.locator(".price-install").innerText()));
     ok("adatlap: alapszerelés tartalma lenyitható", (await page.locator(".install-details li").count()) > 3);
     ok("adatlap: műszaki táblázat vagy magyarázat", (await page.locator(".spec-table tr, .specs-note").count()) > 0);
-    await page.locator(".price-box .btn").click();
-    await page.waitForURL(/klima=/);
-    ok("adatlap -> űrlap: típus előválasztva", await page.locator('input[value="klima-telepites"]').isChecked());
-    ok("adatlap -> űrlap: üzenet előtöltve a klíma nevével", (await page.locator("#uzenet").inputValue()).includes(name));
+    ok("adatlap: ajánlat gomb hívást indít", (await page.locator(".price-box .btn").getAttribute("href")) === tel);
     await ctx.close();
   }
 

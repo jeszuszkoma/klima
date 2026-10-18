@@ -10,9 +10,8 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const dist = join(root, "dist");
 const site = JSON.parse(readFileSync(join(root, "data", "site.json"), "utf8"));
 
-// Környezeti felülírások (pl. GitHub Pages előnézet vs. éles Worker), hogy ne kelljen két site.json.
+// Környezeti felülírás (pl. GitHub Pages előnézet vs. saját domain), hogy ne kelljen két site.json.
 if (process.env.SITE_URL) site.url = process.env.SITE_URL;
-if (process.env.FORM_ENDPOINT !== undefined) site.form.endpoint = process.env.FORM_ENDPOINT || null;
 
 const products = loadProducts(root, site);
 
@@ -70,7 +69,6 @@ need(filled(site.legal?.taxNumber), "Adószám (legal.taxNumber)");
 need(filled(site.legal?.registration), "Cégjegyzék-/nyilvántartási szám (legal.registration)");
 need(filled(site.legal?.hosting), "Tárhelyszolgáltató adatai (legal.hosting)");
 need(filled(site.installation?.price), "Alapszerelési ár összege (installation.price)");
-need(filled(site.form?.endpoint), "Ajánlatkérő űrlap végpontja (form.endpoint)");
 need(filled(site.url), "Végleges domain (url)");
 need(!site.preview, "Előnézeti sáv kikapcsolása (preview: false)");
 need(!site.noindex, "Keresők engedélyezése (noindex: false)");

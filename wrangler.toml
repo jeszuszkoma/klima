@@ -1,22 +1,9 @@
-# Miklósi Klíma – Cloudflare Worker (éles kiszolgálás + ajánlatkérő végpont)
+# Miklósi Klíma – Cloudflare kiszolgálás (opcionális, saját domainhez)
+# Csak statikus fájlok: az ajánlatkérés telefonon történik, nincs szerveroldali végpont.
 # Telepítés: npm run build && npx wrangler deploy
 name = "miklosi-klima"
-main = "worker/index.js"
 compatibility_date = "2026-10-01"
 
 [assets]
 directory = "./dist"
-binding = "ASSETS"
 not_found_handling = "404-page"
-
-[vars]
-# Vesszővel elválasztva, ha az űrlap más domainről is küldhet (pl. GitHub Pages előnézet).
-ALLOWED_ORIGINS = "https://jeszuszkoma.github.io"
-# KITÖLTENDŐ élesítés előtt (Email Routing-ban ellenőrzött címek):
-# FORM_TO   = "ajanlat@<domain>"      # ide érkeznek az ajánlatkérések
-# FORM_FROM = "weboldal@<domain>"     # a domainhez tartozó feladó cím
-
-# KITÖLTENDŐ: Cloudflare Email Routing bekapcsolása a domainen, majd:
-# [[send_email]]
-# name = "MAIL"
-# destination_address = "ajanlat@<domain>"

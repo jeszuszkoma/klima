@@ -3,7 +3,7 @@
   "preview": true,
   "noindex": true,
   "url": null,
-  "assetVersion": 2,
+  "assetVersion": 3,
   "name": "Miklósi Klíma",
   "legalName": null,
   "schemaType": "HVACBusiness",
@@ -39,7 +39,7 @@
   "installation": {
     "_note": "A klímák ára + alapszerelési ár. Amíg a price null, az oldalon kitöltendőként jelenik meg (nem találunk ki árat).",
     "label": "alapszerelési ár",
-    "price": null,
+    "price": "90 000 Ft",
     "includes": [
       "2 × 3 m szigetelt rézcső",
       "3 m elektromos vezeték",
@@ -68,7 +68,8 @@
         "service": "Kültéri egység felhelyezése 3 m felett",
         "price": "egyedi ajánlat alapján"
       }
-    ]
+    ],
+    "appliesToOwnUnit": true
   },
   "productPrices": {
     "_note": "A termékárak forrása a gyártói/forgalmazói webáruház. A nettó árakat vatRate szerinti áfával bruttósítjuk, mert lakossági vevőknek bruttó árat kell mutatni.",
@@ -96,13 +97,9 @@
     ],
     "footnote": null
   },
-  "form": {
-    "endpoint": null,
-    "_endpointNote": "Az ajánlatkérő űrlap csak akkor küld, ha itt meg van adva egy működő végpont (pl. a Cloudflare Worker: \"/api/ajanlatkeres\" vagy teljes URL). Amíg null, az űrlap ezt jelzi, és nem mutat hamis sikerüzenetet."
-  },
   "seo": {
     "title": "Klímaszerelés és klímatelepítés – Gree és Syen klímák",
-    "description": "Gree és Syen klímák beszereléssel, vagy csak klímaszerelés a saját készülékedhez Szabolcs-Szatmár-Bereg, Borsod-Abaúj-Zemplén és Hajdú-Bihar vármegyében. Ingyenes felmérés.",
+    "description": "Gree és Syen klímák beszereléssel, vagy csak klímaszerelés a saját készülékedhez Szabolcs-Szatmár-Bereg, Borsod-Abaúj-Zemplén és Hajdú-Bihar vármegyében. Alapszerelés 90 000 Ft, ingyenes felmérés.",
     "ogImage": "assets/og-image.png"
   },
   "freeSurvey": true
