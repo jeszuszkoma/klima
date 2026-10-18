@@ -1,0 +1,19 @@
+{
+  "_README": "Javítások a forrásoldalak hibáihoz. Itt NEM írunk át adatot, csak elrejtjük, ami bizonyíthatóan hibás vagy más termékhez tartozik.",
+  "excludeImages": [],
+  "excludeImagesBySeries": {
+    "Smart One": [
+      "https://klimawebaruhaz.com/wp-content/uploads/2024/05/comfort-x-4-1.jpg"
+    ],
+    "Dark Pro": [
+      "https://klimawebaruhaz.com/wp-content/uploads/2024/10/comso-taviranyito.jpg",
+      "https://klimawebaruhaz.com/wp-content/uploads/2024/10/cosmo-4-1.jpg"
+    ]
+  },
+  "products": {
+    "gree-dark-pro-inverter-5-3-kw-klima-szett": {
+      "hideSpecs": true,
+      "specsNote": "A forgalmazó oldalán ennél a teljesítménynél a 3,5 kW-os modell műszaki adatai szerepelnek, ezért itt nem közöljük őket. A pontos adatokat az egyeztetéskor megadjuk."
+    }
+  }
+}

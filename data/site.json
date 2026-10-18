@@ -1,0 +1,75 @@
+{
+  "_README": "Az oldal ÖSSZES üzleti adata itt van. A null értékű mezők KITÖLTENDŐK élesítés előtt: az oldalon [szögletes zárójeles] jelöléssel látszanak, és a build listázza őket. Ne írj ide olyan adatot, ami nem valós.",
+
+  "preview": true,
+  "noindex": true,
+  "url": null,
+  "assetVersion": 1,
+
+  "name": "Miklósi Klíma",
+  "legalName": null,
+  "schemaType": "HVACBusiness",
+  "logo": null,
+
+  "phone": "+36 70 709 4396",
+  "email": null,
+  "serviceArea": null,
+  "address": {
+    "zip": null,
+    "city": null,
+    "street": null,
+    "country": "HU"
+  },
+  "hours": {
+    "rows": [],
+    "short": null
+  },
+
+  "legal": {
+    "seat": null,
+    "taxNumber": null,
+    "registration": null,
+    "registrationLabel": "Cégjegyzékszám / nyilvántartási szám",
+    "hosting": null
+  },
+
+  "social": {
+    "facebook": "https://www.facebook.com/share/1DdLKTBirx/",
+    "instagram": null
+  },
+
+  "brands": ["Gree", "Syen"],
+
+  "installation": {
+    "_note": "A klímák ára + felszerelési költség. Amíg a price null, az oldalon kitöltendőként jelenik meg (nem találunk ki árat).",
+    "price": null,
+    "note": null
+  },
+
+  "productPrices": {
+    "_note": "A termékárak forrása a gyártói/forgalmazói webáruház. A nettó árakat vatRate szerinti áfával bruttósítjuk, mert lakossági vevőknek bruttó árat kell mutatni.",
+    "vatRate": 27,
+    "fetchedAt": "2026-10-18",
+    "sources": {
+      "Gree": { "label": "klimawebaruhaz.com (a gree.hu ide irányít)", "url": "https://klimawebaruhaz.com/lakossagi-klimak/" },
+      "Syen": { "label": "syen.hu (Cool4U Kft., a Syen magyarországi forgalmazója)", "url": "https://syen.hu/syen-klima/" }
+    }
+  },
+
+  "prices": {
+    "_note": "Az árlista szakasz csak akkor jelenik meg az oldalon, ha az items lista nem üres. Formátum: { \"service\": \"Szolgáltatás neve\", \"price\": \"pl. 89 000 Ft-tól\", \"note\": \"opcionális megjegyzés\" }",
+    "items": [],
+    "footnote": null
+  },
+
+  "form": {
+    "endpoint": null,
+    "_endpointNote": "Az ajánlatkérő űrlap csak akkor küld, ha itt meg van adva egy működő végpont (pl. a Cloudflare Worker: \"/api/ajanlatkeres\" vagy teljes URL). Amíg null, az űrlap ezt jelzi, és nem mutat hamis sikerüzenetet."
+  },
+
+  "seo": {
+    "title": "Klímaszerelés és klímatelepítés – Gree és Syen klímák",
+    "description": "Gree és Syen klímák beszereléssel, vagy csak klímaszerelés a saját készülékedhez. Kérj ajánlatot egyszerűen, online vagy telefonon.",
+    "ogImage": "assets/og-image.png"
+  }
+}
