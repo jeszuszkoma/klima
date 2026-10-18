@@ -3,7 +3,7 @@
   "preview": true,
   "noindex": true,
   "url": null,
-  "assetVersion": 3,
+  "assetVersion": 4,
   "name": "Miklósi Klíma",
   "legalName": null,
   "schemaType": "HVACBusiness",
@@ -37,7 +37,7 @@
     "Syen"
   ],
   "installation": {
-    "_note": "A klímák ára + alapszerelési ár. Amíg a price null, az oldalon kitöltendőként jelenik meg (nem találunk ki árat).",
+    "_note": "A klímák oldalon látható ára = készülék bruttó ára + alapszerelés (amount). A price a megjelenített szöveg, az amount a számításhoz kell. Saját készülék felszerelésére is ez az ár.",
     "label": "alapszerelési ár",
     "price": "90 000 Ft",
     "includes": [
@@ -69,7 +69,9 @@
         "price": "egyedi ajánlat alapján"
       }
     ],
-    "appliesToOwnUnit": true
+    "appliesToOwnUnit": true,
+    "amount": 90000,
+    "includedInProductPrices": true
   },
   "productPrices": {
     "_note": "A termékárak forrása a gyártói/forgalmazói webáruház. A nettó árakat vatRate szerinti áfával bruttósítjuk, mert lakossági vevőknek bruttó árat kell mutatni.",

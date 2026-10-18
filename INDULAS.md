@@ -34,7 +34,7 @@ A `npm run build` mindig kiírja, mi hiányzik még.
   - **Gree:** gree.hu → klimawebaruhaz.com. Itt **nettó** árak szerepelnek; az oldal **27% áfával bruttósítva** mutatja őket. Ha a vállalkozás alanyi adómentes vagy más áfakulccsal számláz, a `productPrices.vatRate` értéket módosítani kell.
   - **Syen:** syen.hu (Cool4U Kft.), **bruttó** árak, több termék akciós („készlet erejéig”).
 - Az árak változhatnak: érdemes rendszeresen frissíteni őket (a `data/products-raw/*.json` fájlokban).
-- **Alapszerelési ár:** 90 000 Ft, saját készülék felszerelésére is. A tartalma, a további költségek és a klímatisztítás ára (15 000 Ft) fent van.
+- **Alapszerelési ár:** 90 000 Ft, saját készülék felszerelésére is. A klímák oldalon látható ára = készülék bruttó ára + 90 000 Ft alapszerelés (`installation.amount`). A tartalma, a további költségek és a klímatisztítás ára (15 000 Ft) fent van.
 
 ## 4. Termékfotók – engedély
 

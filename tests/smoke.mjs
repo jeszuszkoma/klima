@@ -116,7 +116,7 @@ try {
     ok("kapcsolat: nagy hívógomb", (await page.locator(`#kapcsolat a.call-card[href='${tel}']`).count()) === 1);
     ok("alapszerelés szakasz: ár, tartalom és további költségek", /90\s000\sFt/.test(await page.locator(".install-head strong").innerText()) && (await page.locator("#arak .ticks li").count()) >= 5 && (await page.locator("#arak .price-row").count()) >= 4);
     ok("csak telepítés: alapszerelési ár feltüntetve", /90\s000\sFt/.test(await page.locator("#csak-telepites").innerText()));
-    ok("sorozatkártyák: + alapszerelési ár összeggel", /\+\s?90\s000\sFt alapszerelési ár/.test(await page.locator(".series-card").first().innerText()));
+    ok("sorozatkártyák: ár alapszereléssel együtt", /alapszereléssel együtt/.test(await page.locator(".series-card").first().innerText()));
     await ctx.close();
   }
 
@@ -124,7 +124,12 @@ try {
   if (productPage) {
     const { ctx, page } = await newPage(viewports.mobil);
     await page.goto(base + productPage, { waitUntil: "load" });
-    ok("adatlap: ár + alapszerelési ár", /Ft/.test(await page.locator(".price-now").innerText()) && /alapszerelési ár: 90\s000\sFt/.test(await page.locator(".price-install").innerText()));
+    {
+      const parse = (t) => Number(t.replace(/[^\d]/g, ""));
+      const totalTxt = await page.locator(".price-now").innerText();
+      const [dev, inst] = (await page.locator(".price-install").innerText()).split("+").map(parse);
+      ok("adatlap: teljes ár = készülék + 90 000 Ft alapszerelés", /alapszereléssel együtt/.test(totalTxt) && inst === 90000 && parse(totalTxt.split("Ft")[0]) === dev + inst, `${totalTxt} | ${dev} + ${inst}`);
+    }
     ok("adatlap: alapszerelés tartalma lenyitható", (await page.locator(".install-details li").count()) > 3);
     ok("adatlap: műszaki táblázat vagy magyarázat", (await page.locator(".spec-table tr, .specs-note").count()) > 0);
     ok("adatlap: ajánlat gomb hívást indít", (await page.locator(".price-box .btn").getAttribute("href")) === tel);

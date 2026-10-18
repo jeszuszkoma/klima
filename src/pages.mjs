@@ -277,7 +277,7 @@ function brands(site, products) {
       ${panel("Syen", "brand-syen", `Syen klíma érdekel? ${count("Syen") ? `${count("Syen")} sorozat közül ` : ""}segítek a választásban, a beszereléssel együtt.`, `<a class="text-link" href="klimak.html#syen">Syen klímák és árak</a>`)}
     </div>
     ${series.length ? seriesGrid(series, site) : ""}
-    <p class="fineprint">${products.length ? `Az árak a készülékek bruttó árai, amelyekhez az <a href="#arak">alapszerelési ár</a> adódik. ${priceSourceSentence(site)}` : "A konkrét típusokról, az aktuális elérhetőségről és az árakról ajánlatkéréskor adok tájékoztatást."} Más márkájú, saját készülék beszereléséről is érdemes egyeztetni.</p>
+    <p class="fineprint">${products.length ? `${instAmount(site) ? `Az árak a készülék bruttó árát és az <a href="#arak">alapszerelést</a> (${formatFt(instAmount(site))}) együtt tartalmazzák.` : `Az árak a készülékek bruttó árai, amelyekhez az <a href="#arak">alapszerelési ár</a> adódik.`} ${priceSourceSentence(site)}` : "A konkrét típusokról, az aktuális elérhetőségről és az árakról ajánlatkéréskor adok tájékoztatást."} Más márkájú, saját készülék beszereléséről is érdemes egyeztetni.</p>
   </div>
 </section>`;
 }
@@ -292,7 +292,7 @@ function seriesGrid(series, site) {
             <span class="series-brand">${esc(g.brand)}</span>
             <span class="series-name">${esc(g.series)}</span>
             <span class="series-meta">${g.minKw === g.maxKw ? formatKw(g.minKw) : `${formatKw(g.minKw).replace(" kW", "")}–${formatKw(g.maxKw)}`}${g.energyClass ? `, ${esc(g.energyClass)}` : ""}</span>
-            <span class="series-price"><strong>${formatFt(g.minPrice)}-tól</strong><span>${installLine(site)}</span></span>
+            <span class="series-price"><strong>${formatFt(total(site, g.minPrice))}-tól</strong><span>${totalNote(site)}</span></span>
           </span>
         </a>
       </li>`).join("\n      ")}
@@ -311,6 +311,11 @@ function huDate(iso) {
   const [y, mo, d] = iso.split("-").map(Number);
   return `${y}. ${m[mo - 1]} ${d === 1 ? "1-jei" : `${d}-i`}`;
 }
+
+// Teljes ár = készülék bruttó ára + alapszerelés (ha a site.json szerint benne van).
+const instAmount = (site) => (site.installation?.includedInProductPrices && Number.isFinite(site.installation?.amount) ? site.installation.amount : 0);
+const total = (site, gross) => gross + instAmount(site);
+const totalNote = (site) => (instAmount(site) ? "alapszereléssel együtt" : "bruttó");
 
 function installLine(site, { long = false } = {}) {
   const inst = site.installation || {};
@@ -374,7 +379,7 @@ function prices(site) {
     <div class="price-main">
       <header class="section-head">
         <h2 id="arak-cim">Alapszerelés és árak</h2>
-        <p>A klíma ára mellé az alapszerelési ár jön. Ugyanez az ár érvényes akkor is, ha már megvan a klímád, és csak a felszerelést kéred.</p>
+        <p>${instAmount(site) ? "A klímák oldalon látható ára már tartalmazza az alapszerelést." : "A klíma ára mellé az alapszerelési ár jön."} Ha már megvan a klímád, és csak a felszerelést kéred, ugyanez az alapszerelési ár érvényes.</p>
       </header>
       <div class="install-card">
         <p class="install-head"><span>Alapszerelési ár</span><strong>${has(inst.price) ? esc(inst.price) : fill(null, "alapszerelési ár összege")}</strong></p>
@@ -450,7 +455,7 @@ export function catalog(site, products) {
     <p><a class="back-link" href="./">Vissza a főoldalra</a></p>
     <header class="section-head">
       <h1 id="klimak-cim">Klímák és árak</h1>
-      <p>Gree és Syen oldalfali split klímák bruttó áron. Az árakhoz az <a href="./#arak">alapszerelési ár</a> adódik. Ha már megvan a saját készüléked, <a href="./#csak-telepites">csak a telepítést is kérheted</a>.</p>
+      <p>Gree és Syen oldalfali split klímák. ${instAmount(site) ? `Az árak a készülék bruttó árát és az <a href="./#arak">alapszerelést</a> (${formatFt(instAmount(site))}) együtt tartalmazzák.` : `Az árakhoz az <a href="./#arak">alapszerelési ár</a> adódik.`} Ha már megvan a saját készüléked, <a href="./#csak-telepites">csak a telepítést is kérheted</a>.</p>
     </header>
     <nav class="catalog-filter" aria-label="Márkák">
       ${brandsList.map((b) => `<a href="#${b.toLowerCase()}">${b}</a>`).join("")}
@@ -470,7 +475,7 @@ export function catalog(site, products) {
             <a class="model-row" href="${esc(p.page)}">
               <span class="model-kw">${formatKw(p.capacityKw)}</span>
               <span class="model-name">${esc(p.name)}</span>
-              <span class="model-price">${p.originalGross ? `<s aria-label="Korábbi ár">${formatFt(p.originalGross)}</s>` : ""}<strong>${formatFt(p.priceGross)}</strong><small>${installLine(site)}</small></span>
+              <span class="model-price">${p.originalGross ? `<s aria-label="Korábbi ár">${formatFt(total(site, p.originalGross))}</s>` : ""}<strong>${formatFt(total(site, p.priceGross))}</strong><small>${totalNote(site)}</small></span>
               <span class="model-more">Részletek</span>
             </a>
           </li>`).join("\n          ")}
@@ -482,7 +487,7 @@ export function catalog(site, products) {
 </section>`;
   return layout(site, {
     title: `Gree és Syen klímák árai | ${site.name}`,
-    description: "Gree és Syen oldalfali klímák bruttó árai és műszaki adatai. Az árakhoz az alapszerelési ár adódik. Kérj ajánlatot beszereléssel együtt.",
+    description: "Gree és Syen oldalfali klímák árai alapszereléssel együtt, műszaki adatokkal. Ingyenes felmérés, ajánlat telefonon.",
     path: "klimak.html",
     body,
   });
@@ -512,11 +517,13 @@ export function productPage(site, p, siblings) {
           ${p.models ? `<li><span>Típus</span><strong>${esc(p.models)}</strong></li>` : ""}
         </ul>
         <div class="price-box">
-          ${p.originalGross ? `<p class="price-old"><s aria-label="Korábbi ár">${formatFt(p.originalGross)}</s></p>` : ""}
-          <p class="price-now">${formatFt(p.priceGross)} <span>bruttó</span></p>
-          <p class="price-install">${installLine(site, { long: true })}</p>
+          ${p.originalGross ? `<p class="price-old"><s aria-label="Korábbi ár">${formatFt(total(site, p.originalGross))}</s></p>` : ""}
+          <p class="price-now">${formatFt(total(site, p.priceGross))} <span>${totalNote(site)}</span></p>
+          ${instAmount(site)
+            ? `<p class="price-install">Készülék: ${formatFt(p.priceGross)} + alapszerelés: ${formatFt(instAmount(site))}</p>`
+            : `<p class="price-install">${installLine(site, { long: true })}</p>`}
           ${(site.installation?.includes || []).length ? `<details class="install-details"><summary>Mit tartalmaz az alapszerelés?</summary><ul>${site.installation.includes.map((i) => `<li>${esc(i)}</li>`).join("")}</ul><p><a href="./#arak">További költségek és árak</a></p></details>` : ""}
-          ${p.priceWasNet ? `<p class="price-src">Nettó ${formatFt(p.priceNet)} + ${site.productPrices?.vatRate ?? 27}% áfa</p>` : ""}
+          ${p.priceWasNet ? `<p class="price-src">A készülék ára: nettó ${formatFt(p.priceNet)} + ${site.productPrices?.vatRate ?? 27}% áfa</p>` : ""}
           ${p.saleNote ? `<p class="price-src">${esc(p.saleNote)}</p>` : ""}
           ${has(site.phone) ? `<a class="btn btn-primary btn-block" href="${telHref(site.phone)}">${icon("phone")}Ajánlatért hívj: ${esc(site.phone)}</a>` : ""}
           <p class="price-alt">Már megvan a készüléked? <a href="./#csak-telepites">Kérj csak telepítést</a>.</p>
@@ -542,7 +549,7 @@ export function productPage(site, p, siblings) {
 </section>`;
   return layout(site, {
     title: `${p.name} ára és műszaki adatai | ${site.name}`,
-    description: `${p.name}: ${formatFt(p.priceGross)} bruttó + alapszerelési ár. ${p.energyClass ? `Energiaosztály: ${p.energyClass}. ` : ""}Műszaki adatok és ajánlatkérés beszereléssel.`,
+    description: `${p.name}: ${formatFt(total(site, p.priceGross))} ${totalNote(site)}. ${p.energyClass ? `Energiaosztály: ${p.energyClass}. ` : ""}Műszaki adatok és ajánlatkérés beszereléssel.`,
     path: p.page,
     body,
   });
