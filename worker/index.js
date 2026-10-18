@@ -12,7 +12,7 @@ const TIPUS = {
 };
 const MARKA = new Set(["", "Gree", "Syen", "Még nem döntöttem", "Egyéb"]);
 
-const phoneFallback = site.phone ? ` Hívj minket: ${site.phone}.` : "";
+const phoneFallback = site.phone ? ` Hívj: ${site.phone}.` : "";
 
 export function validate(body) {
   const fields = {};
@@ -21,7 +21,6 @@ export function validate(body) {
     tipus: str(body?.tipus, 40),
     nev: str(body?.nev, 100),
     telefon: str(body?.telefon, 30),
-    email: str(body?.email, 120),
     telepules: str(body?.telepules, 80),
     marka: str(body?.marka, 40),
     uzenet: str(body?.uzenet, 2000),
@@ -32,7 +31,6 @@ export function validate(body) {
   if (!/^[+\d\s()\/.-]+$/.test(data.telefon) || digits.length < 9 || digits.length > 15) {
     fields.telefon = "Ellenőrizd a telefonszámot, pl. +36 30 123 4567.";
   }
-  if (data.email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(data.email)) fields.email = "Ellenőrizd az e-mail-címet.";
   if (!MARKA.has(data.marka)) data.marka = "";
   if (body?.hozzajarulas !== true) fields.hozzajarulas = "Az elküldéshez fogadd el az adatkezelési tájékoztatót.";
   return { data, fields, ok: Object.keys(fields).length === 0 };
@@ -45,7 +43,6 @@ export function buildMessage(data) {
     `Típus: ${TIPUS[data.tipus]}`,
     `Név: ${data.nev}`,
     `Telefon: ${data.telefon}`,
-    `E-mail: ${data.email || "-"}`,
     `Település: ${data.telepules || "-"}`,
     `Márka: ${data.marka || "-"}`,
     "",
@@ -132,7 +129,7 @@ export default {
       return json({ ok: false, error: "Hibás kérés." }, 400, cors);
     }
 
-    // Robotcsapda: kitöltött rejtett mező -> csendben elutasítjuk, de NEM jelentünk sikert.
+    // Robotcsapda: kitöltött rejtett mező -> elutasítás, de SOHA nem siker.
     if (String(body?.weboldal || "").trim()) return json({ ok: false, error: "A kérést nem tudtuk feldolgozni." }, 400, cors);
 
     const { data, fields, ok } = validate(body);
@@ -148,7 +145,7 @@ export default {
       const raw = buildMime({
         from: env.FORM_FROM,
         to: env.FORM_TO,
-        replyTo: data.email || null,
+        replyTo: null,
         subject: `Ajánlatkérés: ${TIPUS[data.tipus]} – ${data.nev}`,
         text: buildMessage(data),
       });

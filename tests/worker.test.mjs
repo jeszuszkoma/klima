@@ -3,7 +3,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import worker, { validate, buildMime, buildMessage, tooMany } from "../worker/index.js";
 
-const good = { tipus: "csak-telepites", nev: "Teszt Elek", telefon: "+36 30 123 4567", email: "", hozzajarulas: true };
+const good = { tipus: "csak-telepites", nev: "Teszt Elek", telefon: "+36 30 123 4567", hozzajarulas: true };
 const req = (body, headers = {}) =>
   new Request("https://pelda.hu/api/ajanlatkeres", {
     method: "POST",
@@ -11,14 +11,16 @@ const req = (body, headers = {}) =>
     body: typeof body === "string" ? body : JSON.stringify(body),
   });
 
-test("érvényes adatok átmennek", () => {
-  assert.equal(validate(good).ok, true);
+test("érvényes adatok átmennek, e-mail nélkül", () => {
+  const r = validate({ ...good, email: "bárki@pelda.hu" });
+  assert.equal(r.ok, true);
+  assert.equal("email" in r.data, false);
 });
 
 test("kötelező mezők és formátumok", () => {
-  const r = validate({ tipus: "x", nev: "A", telefon: "12ab", email: "nem-email", hozzajarulas: false });
+  const r = validate({ tipus: "x", nev: "A", telefon: "12ab", hozzajarulas: false });
   assert.equal(r.ok, false);
-  assert.deepEqual(Object.keys(r.fields).sort(), ["email", "hozzajarulas", "nev", "telefon", "tipus"]);
+  assert.deepEqual(Object.keys(r.fields).sort(), ["hozzajarulas", "nev", "telefon", "tipus"]);
 });
 
 test("ismeretlen márka kiürül, hosszú szöveg levágódik", () => {

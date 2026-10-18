@@ -1,19 +1,16 @@
 {
   "_README": "Az oldal ÖSSZES üzleti adata itt van. A null értékű mezők KITÖLTENDŐK élesítés előtt: az oldalon [szögletes zárójeles] jelöléssel látszanak, és a build listázza őket. Ne írj ide olyan adatot, ami nem valós.",
-
   "preview": true,
   "noindex": true,
   "url": null,
-  "assetVersion": 1,
-
+  "assetVersion": 2,
   "name": "Miklósi Klíma",
   "legalName": null,
   "schemaType": "HVACBusiness",
   "logo": null,
-
-  "phone": "+36 70 709 4396",
+  "phone": "+36 70 389 1409",
   "email": null,
-  "serviceArea": null,
+  "serviceArea": "Szabolcs-Szatmár-Bereg, Borsod-Abaúj-Zemplén és Hajdú-Bihar vármegye",
   "address": {
     "zip": null,
     "city": null,
@@ -24,7 +21,6 @@
     "rows": [],
     "short": null
   },
-
   "legal": {
     "seat": null,
     "taxNumber": null,
@@ -32,44 +28,82 @@
     "registrationLabel": "Cégjegyzékszám / nyilvántartási szám",
     "hosting": null
   },
-
   "social": {
     "facebook": "https://www.facebook.com/share/1DdLKTBirx/",
     "instagram": null
   },
-
-  "brands": ["Gree", "Syen"],
-
+  "brands": [
+    "Gree",
+    "Syen"
+  ],
   "installation": {
-    "_note": "A klímák ára + felszerelési költség. Amíg a price null, az oldalon kitöltendőként jelenik meg (nem találunk ki árat).",
+    "_note": "A klímák ára + alapszerelési ár. Amíg a price null, az oldalon kitöltendőként jelenik meg (nem találunk ki árat).",
+    "label": "alapszerelési ár",
     "price": null,
-    "note": null
+    "includes": [
+      "2 × 3 m szigetelt rézcső",
+      "3 m elektromos vezeték",
+      "3 m cseppvízcső",
+      "betáp elvezetése 3 m-ig",
+      "oldalfali konzol a kültéri egységhez",
+      "1 db falátfúrás 45 cm falvastagságig",
+      "munkadíj",
+      "kiszállás",
+      "minden egyéb szükséges szerelék (csavarok, tiplik, szigetelőanyag stb.)"
+    ],
+    "extras": [
+      {
+        "service": "3 méter feletti csőhossz",
+        "price": "10 000 Ft/m"
+      },
+      {
+        "service": "Műanyag csatornában történő csőelvezetés",
+        "price": "10 000 Ft/m"
+      },
+      {
+        "service": "Minden további faláttörés",
+        "price": "220 Ft/cm"
+      },
+      {
+        "service": "Kültéri egység felhelyezése 3 m felett",
+        "price": "egyedi ajánlat alapján"
+      }
+    ]
   },
-
   "productPrices": {
     "_note": "A termékárak forrása a gyártói/forgalmazói webáruház. A nettó árakat vatRate szerinti áfával bruttósítjuk, mert lakossági vevőknek bruttó árat kell mutatni.",
     "vatRate": 27,
     "fetchedAt": "2026-10-18",
     "sources": {
-      "Gree": { "label": "klimawebaruhaz.com (a gree.hu ide irányít)", "url": "https://klimawebaruhaz.com/lakossagi-klimak/" },
-      "Syen": { "label": "syen.hu (Cool4U Kft., a Syen magyarországi forgalmazója)", "url": "https://syen.hu/syen-klima/" }
+      "Gree": {
+        "label": "klimawebaruhaz.com (a gree.hu ide irányít)",
+        "url": "https://klimawebaruhaz.com/lakossagi-klimak/"
+      },
+      "Syen": {
+        "label": "syen.hu (Cool4U Kft., a Syen magyarországi forgalmazója)",
+        "url": "https://syen.hu/syen-klima/"
+      }
     }
   },
-
   "prices": {
     "_note": "Az árlista szakasz csak akkor jelenik meg az oldalon, ha az items lista nem üres. Formátum: { \"service\": \"Szolgáltatás neve\", \"price\": \"pl. 89 000 Ft-tól\", \"note\": \"opcionális megjegyzés\" }",
-    "items": [],
+    "items": [
+      {
+        "service": "Klímatisztítás beltéri mosással",
+        "price": "15 000 Ft",
+        "note": null
+      }
+    ],
     "footnote": null
   },
-
   "form": {
     "endpoint": null,
     "_endpointNote": "Az ajánlatkérő űrlap csak akkor küld, ha itt meg van adva egy működő végpont (pl. a Cloudflare Worker: \"/api/ajanlatkeres\" vagy teljes URL). Amíg null, az űrlap ezt jelzi, és nem mutat hamis sikerüzenetet."
   },
-
   "seo": {
     "title": "Klímaszerelés és klímatelepítés – Gree és Syen klímák",
-    "description": "Gree és Syen klímák beszereléssel, vagy csak klímaszerelés a saját készülékedhez. Kérj ajánlatot egyszerűen, online vagy telefonon.",
+    "description": "Gree és Syen klímák beszereléssel, vagy csak klímaszerelés a saját készülékedhez Szabolcs-Szatmár-Bereg, Borsod-Abaúj-Zemplén és Hajdú-Bihar vármegyében. Ingyenes felmérés.",
     "ogImage": "assets/og-image.png"
-  }
+  },
+  "freeSurvey": true
 }

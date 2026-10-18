@@ -111,6 +111,9 @@ try {
     await page.locator("#ajanlat-form button[type=submit]").click();
     const errs = await page.locator(".field-error:not([hidden])").count();
     ok("üres űrlap: hibaüzenetek megjelennek", errs >= 4, `${errs} hiba`);
+    ok("nincs e-mail-cím az oldalon (mailto)", (await page.locator("a[href^='mailto:']").count()) === 0);
+    ok("alapszerelés szakasz: tartalom és további költségek", (await page.locator("#arak .ticks li").count()) >= 5 && (await page.locator("#arak .price-row").count()) >= 4);
+    ok("telefonszám a hirdetés szerint", (await page.locator("a[href='tel:+36703891409']").count()) > 0);
     ok("üres űrlap: nincs sikerüzenet", await page.locator(".form-success").isHidden());
     ok("üres űrlap: első hibás mezőre kerül a fókusz", await page.evaluate(() => document.activeElement?.name === "tipus"));
 
@@ -120,10 +123,7 @@ try {
     await page.locator("#ajanlat-form button[type=submit]").click();
     ok("hibás telefonszám: konkrét hibaüzenet", /telefonszámot/.test(await page.locator("#telefon-hiba").innerText()));
     await page.fill("#telefon", "+36 30 123 4567");
-    await page.fill("#email", "rossz@");
-    await page.locator("#ajanlat-form button[type=submit]").click();
-    ok("hibás e-mail: hibaüzenet", !(await page.locator("#email-hiba").isHidden()));
-    await page.fill("#email", "");
+    ok("nincs e-mail mező az űrlapon", (await page.locator("#ajanlat-form input[type=email]").count()) === 0);
     await page.check("#hozzajarulas");
     await page.locator("#ajanlat-form button[type=submit]").click();
     const status = page.locator(".form-status");
@@ -163,7 +163,8 @@ try {
     const { ctx, page } = await newPage(viewports.mobil);
     await page.goto(base + productPage, { waitUntil: "load" });
     const name = await page.locator("h1").innerText();
-    ok("adatlap: ár és felszerelési költség jelölés", /Ft/.test(await page.locator(".price-now").innerText()) && /felszerelési költség/.test(await page.locator(".price-install").innerText()));
+    ok("adatlap: ár + alapszerelési ár jelölés", /Ft/.test(await page.locator(".price-now").innerText()) && /alapszerelési ár/.test(await page.locator(".price-install").innerText()));
+    ok("adatlap: alapszerelés tartalma lenyitható", (await page.locator(".install-details li").count()) > 3);
     ok("adatlap: műszaki táblázat vagy magyarázat", (await page.locator(".spec-table tr, .specs-note").count()) > 0);
     await page.locator(".price-box .btn").click();
     await page.waitForURL(/klima=/);

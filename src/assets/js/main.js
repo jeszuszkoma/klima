@@ -68,9 +68,8 @@
     tipus: "Válaszd ki, mire van szükséged.",
     nevUres: "Add meg a neved.",
     nevRovid: "A név legalább 2 karakter legyen.",
-    telUres: "Add meg a telefonszámod, hogy vissza tudjunk hívni.",
+    telUres: "Add meg a telefonszámod, hogy vissza tudjalak hívni.",
     telHibas: "Ellenőrizd a telefonszámot, pl. +36 30 123 4567.",
-    email: "Ellenőrizd az e-mail-címet, pl. nev@pelda.hu.",
     hozzajarulas: "Az elküldéshez fogadd el az adatkezelési tájékoztatót."
   };
 
@@ -97,32 +96,28 @@
     var d = digits(v);
     return d.length >= 9 && d.length <= 15;
   }
-  function validEmail(s) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(s || "").trim()); }
 
   function validate() {
     var errors = [];
     var tipus = form.querySelector('input[name="tipus"]:checked');
     var nev = form.nev.value.trim();
     var tel = form.telefon.value.trim();
-    var email = form.email.value.trim();
 
     if (!tipus) errors.push(["tipus", MESSAGES.tipus]);
     if (!nev) errors.push(["nev", MESSAGES.nevUres]);
     else if (nev.length < 2) errors.push(["nev", MESSAGES.nevRovid]);
     if (!tel) errors.push(["telefon", MESSAGES.telUres]);
     else if (!validPhone(tel)) errors.push(["telefon", MESSAGES.telHibas]);
-    if (email && !validEmail(email)) errors.push(["email", MESSAGES.email]);
     if (!form.hozzajarulas.checked) errors.push(["hozzajarulas", MESSAGES.hozzajarulas]);
 
-    ["tipus", "nev", "telefon", "email", "hozzajarulas"].forEach(clearError);
+    ["tipus", "nev", "telefon", "hozzajarulas"].forEach(clearError);
     errors.forEach(function (e) { setError(e[0], e[1]); });
     return errors;
   }
 
   function contactLinesHtml() {
     var parts = [];
-    if (contact.phone) parts.push('Hívj minket: <a href="tel:' + contact.phone.replace(/[^\d+]/g, "") + '">' + contact.phone + "</a>");
-    if (contact.email) parts.push('Írj e-mailt: <a href="mailto:' + contact.email + '">' + contact.email + "</a>");
+    if (contact.phone) parts.push('Hívj: <a href="tel:' + contact.phone.replace(/[^\d+]/g, "") + '">' + contact.phone + "</a>");
     return parts.map(function (p) { return "<p>" + p + "</p>"; }).join("");
   }
 
@@ -147,8 +142,7 @@
     // Javítás közben csak az adott mező hibája frissül, a többi mezőt nem bántjuk.
     var checkOne = {
       nev: function (v) { return !v ? MESSAGES.nevUres : v.length < 2 ? MESSAGES.nevRovid : ""; },
-      telefon: function (v) { return !v ? MESSAGES.telUres : !validPhone(v) ? MESSAGES.telHibas : ""; },
-      email: function (v) { return v && !validEmail(v) ? MESSAGES.email : ""; }
+      telefon: function (v) { return !v ? MESSAGES.telUres : !validPhone(v) ? MESSAGES.telHibas : ""; }
     };
     Object.keys(checkOne).forEach(function (name) {
       var el = form.elements[name];
@@ -175,9 +169,9 @@
 
       var endpoint = form.getAttribute("data-endpoint");
       if (!endpoint) {
-        // Nincs beállított küldési mód: soha nem mutatunk hamis sikert.
-        showStatus("<p><strong>Az online ajánlatkérés még nincs bekapcsolva, ezért az üzenetedet most nem tudjuk elküldeni.</strong></p>" +
-          (contactLinesHtml() || "<p>Kérjük, próbáld újra később.</p>"));
+        // Nincs beállított küldési mód: soha nem jelenik meg hamis siker.
+        showStatus("<p><strong>Az online ajánlatkérés még nincs bekapcsolva, ezért az üzenetedet most nem lehet elküldeni.</strong></p>" +
+          (contactLinesHtml() || "<p>Próbáld újra később.</p>"));
         return;
       }
 
@@ -185,7 +179,6 @@
         tipus: form.querySelector('input[name="tipus"]:checked').value,
         nev: form.nev.value.trim(),
         telefon: form.telefon.value.trim(),
-        email: form.email.value.trim(),
         telepules: form.telepules.value.trim(),
         marka: form.marka.value,
         uzenet: form.uzenet.value.trim(),

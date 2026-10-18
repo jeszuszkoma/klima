@@ -8,11 +8,11 @@ A keresők elől el van rejtve (`noindex`), és felül sárga sáv jelzi, hogy m
 | Mező | Mi kell | Állapot |
 |---|---|---|
 | `name` | Cégnév | ✅ Miklósi Klíma |
-| `phone` | Telefonszám | ✅ +36 70 709 4396 |
+| `phone` | Telefonszám | ✅ +36 70 389 1409 |
 | `social.facebook` | Facebook-oldal | ✅ megadva |
-| `email` | E-mail-cím | ❌ hiányzik |
-| `serviceArea` | Működési terület (pl. megye, városok) | ❌ hiányzik |
-| `installation.price` | Felszerelési költség | ❌ hiányzik |
+| `email` | E-mail-cím – **csak az Impresszumba** (az elektronikus kereskedelmi törvény kötelezővé teszi); az oldalon máshol nem jelenik meg, és az űrlapon sincs e-mail mező | ❌ hiányzik |
+| `serviceArea` | Működési terület | ✅ Szabolcs-Szatmár-Bereg, Borsod-Abaúj-Zemplén és Hajdú-Bihar vármegye |
+| `installation.price` | Az alapszerelési ár összege (a tartalma és a további költségek már fent vannak) | ❌ hiányzik |
 | `legalName` | Hivatalos név (cég vagy egyéni vállalkozó) | ❌ hiányzik |
 | `legal.seat` | Székhely | ❌ hiányzik |
 | `legal.taxNumber` | Adószám | ❌ hiányzik |
@@ -34,7 +34,7 @@ A `npm run build` mindig kiírja, mi hiányzik még.
   - **Gree:** gree.hu → klimawebaruhaz.com. Itt **nettó** árak szerepelnek; az oldal **27% áfával bruttósítva** mutatja őket. Ha a vállalkozás alanyi adómentes vagy más áfakulccsal számláz, a `productPrices.vatRate` értéket módosítani kell.
   - **Syen:** syen.hu (Cool4U Kft.), **bruttó** árak, több termék akciós („készlet erejéig”).
 - Az árak változhatnak: érdemes rendszeresen frissíteni őket (a `data/products-raw/*.json` fájlokban).
-- **Felszerelési költség:** megadásra vár (`installation.price`).
+- **Alapszerelési ár:** az összeg megadásra vár (`installation.price`). A tartalma, a további költségek és a klímatisztítás ára (15 000 Ft) már fent van.
 
 ## 4. Termékfotók – engedély
 
@@ -44,7 +44,9 @@ A termékfotók a forgalmazók képei (klimawebaruhaz.com, illetve a syen.hu / C
 
 A GitHub Pages csak statikus oldalt tud kiszolgálni, ezért ott az űrlap **nem küld**, hanem egyértelműen jelzi, hogy az online ajánlatkérés még nincs bekapcsolva, és felajánlja a telefonszámot. Hamis sikerüzenet soha nem jelenik meg.
 
-Bekapcsolás (Cloudflare Worker, a többi oldaladhoz hasonlóan):
+**Nyitott kérdés:** Laci nem szeretne e-mailt. A Worker jelenleg e-mailben továbbítaná az ajánlatkérést, ezért el kell dönteni, hogyan érkezzen meg hozzá (pl. SMS, Telegram, Viber), vagy maradjon csak a telefonos elérhetőség.
+
+Bekapcsolás e-mailes továbbítással (Cloudflare Worker, a többi oldaladhoz hasonlóan):
 
 1. Saját domain Cloudflare-en (pl. `miklosiklima.hu`).
 2. Cloudflare **Email Routing** bekapcsolása a domainen, és a fogadó cím (`FORM_TO`) ellenőrzése.

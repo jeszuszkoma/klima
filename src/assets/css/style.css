@@ -580,3 +580,22 @@ h3 { font-size: 1.3rem; line-height: 1.2; letter-spacing: -0.01em; }
 .specs-note { max-width: 70ch; padding: 16px 18px; border-radius: var(--r-md); background: var(--surface); box-shadow: inset 0 0 0 1px var(--line); color: var(--muted); }
 /* Aloldalakon kisebb felső térköz. */
 .section.product, .section.catalog, .section.legal { padding-top: clamp(20px, 3vw, 40px); }
+
+/* ---------- alapszerelés és árak ---------- */
+.price-grid { display: grid; gap: 32px; align-items: start; }
+@media (min-width: 960px) { .price-grid { grid-template-columns: 1.1fr 0.9fr; gap: 56px; } }
+.install-card { padding: clamp(22px, 3vw, 34px); border-radius: var(--r-lg); background: var(--surface); box-shadow: inset 0 0 0 1px var(--line); }
+.install-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px 16px; margin: 0 0 20px; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
+.install-head span { font-weight: 600; }
+.install-head strong { font-family: var(--font-display); font-size: 1.5rem; }
+.install-card h3, .price-side h3 { font-family: var(--font-body); font-size: 1rem; font-weight: 600; letter-spacing: 0; margin-bottom: 12px; }
+.install-card .ticks { margin: 0; }
+.price-side h3 + .price-list { margin-bottom: 28px; }
+.price-side .price-list { max-width: none; }
+.price-row dd { text-align: right; white-space: normal; }
+.survey-note { display: flex; gap: 10px; align-items: center; margin: 0; font-weight: 600; }
+.survey-note .icon { color: var(--ok); }
+.install-details { margin-top: 10px; font-size: 0.95rem; }
+.install-details summary { cursor: pointer; color: var(--blue); font-weight: 600; }
+.install-details ul { margin: 10px 0 0; padding-left: 20px; color: var(--ink-2); display: grid; gap: 4px; }
+.install-details p { margin: 10px 0 0 !important; }

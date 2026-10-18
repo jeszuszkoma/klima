@@ -5,9 +5,8 @@ import { groupSeries, formatFt, formatKw } from "../scripts/products.mjs";
 // Képek (Unsplash licenc: szabadon felhasználható, forrásmegjelölés nem kötelező).
 // Illusztrációk, NEM a vállalkozás saját munkái – az alt szövegek is ezt tükrözik.
 const IMG = {
-  hero: "photo-1762341123870-d706f257a12e", // fehér beltéri klíma, 22 fokot mutat
+  // Klíma nélküli lakásbelső: nem mutat idegen márkájú készüléket.
   room: "photo-1628744876497-eb30460be9f6", // világos, modern nappali
-  unit: "photo-1757219525975-03b5984bc6e8", // falra szerelt beltéri egység
 };
 
 const NAV = [
@@ -148,7 +147,6 @@ function footer(site) {
       <h2>Elérhetőség</h2>
       <ul class="footer-contact">
         <li>${icon("phone")}${has(site.phone) ? `<a href="${telHref(site.phone)}">${esc(site.phone)}</a>` : fill(null, "Telefonszám")}</li>
-        <li>${icon("mail")}${has(site.email) ? `<a href="mailto:${esc(site.email)}">${esc(site.email)}</a>` : fill(null, "E-mail-cím")}</li>
         <li>${icon("pin")}<span>Működési terület: ${fill(site.serviceArea, "működési terület")}</span></li>
         ${addr ? `<li>${icon("pin")}<span>${esc(addr)}</span></li>` : ""}
       </ul>
@@ -186,9 +184,9 @@ export function home(site, products = []) {
     hero(site),
     services(),
     brands(site, products),
-    whyPro(),
-    process(),
     prices(site),
+    whyPro(),
+    process(site),
     faq(),
     contact(site),
   ].join("\n");
@@ -200,23 +198,23 @@ function hero(site) {
   <div class="wrap hero-grid">
     <div class="hero-copy">
       <h1 id="hero-cim">Klíma, amitől tényleg jó otthon lenni.</h1>
-      <p class="lead">Gree és Syen klímák szakszerű beszereléssel. Ha a készülék már megvan, a telepítést akkor is vállaljuk.</p>
+      <p class="lead">Gree és Syen klímák szakszerű beszereléssel. Ha a készülék már megvan, a telepítést akkor is vállalom.</p>
       <div class="fork" role="group" aria-label="Válaszd ki, mire van szükséged">
         <a class="fork-door" href="#ajanlatkeres" data-tipus="klima-telepites">
           <span class="fork-kicker">Még nincs klímám</span>
           <span class="fork-title">Ajánlatot kérek</span>
-          <span class="fork-text">Segítünk kiválasztani a készüléket, és be is szereljük.</span>
+          <span class="fork-text">Segítek kiválasztani a készüléket, és be is szerelem.</span>
         </a>
         <a class="fork-door" href="#ajanlatkeres" data-tipus="csak-telepites">
           <span class="fork-kicker">Már megvan a klímám</span>
           <span class="fork-title">Csak telepítést szeretnék</span>
-          <span class="fork-text">A saját készülékedet szereljük be, vásárlási kötelezettség nélkül.</span>
+          <span class="fork-text">A saját készülékedet szerelem be, vásárlási kötelezettség nélkül.</span>
         </a>
       </div>
-      ${has(site.phone) ? `<p class="hero-call">Inkább beszélnél valakivel? Hívj minket: <a href="${telHref(site.phone)}">${esc(site.phone)}</a></p>` : ""}
+      ${has(site.phone) ? `<p class="hero-call">${site.freeSurvey ? "<strong>Ingyenes felmérés.</strong> " : ""}Inkább beszélnél velem? Hívj: <a href="${telHref(site.phone)}">${esc(site.phone)}</a></p>` : ""}
     </div>
     <figure class="hero-media">
-      <img src="${unsplash(IMG.hero, 900, 1100)}" srcset="${srcset(IMG.hero, [480, 720, 900, 1200], 1100 / 900)}" sizes="(min-width: 960px) 44vw, 100vw" width="900" height="1100" alt="Falra szerelt fehér beltéri klímaegység, kijelzőjén 22 fok" fetchpriority="high" decoding="async">
+      <img src="${unsplash(IMG.room, 900, 1100)}" srcset="${srcset(IMG.room, [480, 720, 900, 1200], 1100 / 900)}" sizes="(min-width: 960px) 44vw, 100vw" width="900" height="1100" alt="Világos, modern nappali kanapékkal" fetchpriority="high" decoding="async">
     </figure>
   </div>
 </section>`;
@@ -226,14 +224,14 @@ function services() {
   return `<section id="szolgaltatasok" class="section" aria-labelledby="szolg-cim">
   <div class="wrap">
     <header class="section-head">
-      <h2 id="szolg-cim">Kétféleképpen segítünk</h2>
-      <p>Választhatod a készüléket és a beszerelést együtt, vagy csak a telepítést kéred tőlünk. Mindkettő ugyanolyan fontos nekünk.</p>
+      <h2 id="szolg-cim">Kétféleképpen segítek</h2>
+      <p>Választhatod a készüléket és a beszerelést együtt, vagy csak a telepítést kéred tőlem. Mindkettőt ugyanolyan szívesen vállalom.</p>
     </header>
     <div class="service-grid">
       <article class="service" aria-labelledby="szolg-1">
         <p class="service-tag">Ha még nincs klímád</p>
         <h3 id="szolg-1">Klíma és telepítés</h3>
-        <p>Átbeszéljük, milyen helyiségbe és milyen igényekre keresel klímát, és segítünk kiválasztani a megfelelő Gree vagy Syen készüléket. Utána szakszerűen be is szereljük.</p>
+        <p>Átbeszélem veled, milyen helyiségbe és milyen igényekre keresel klímát, és segítek kiválasztani a megfelelő Gree vagy Syen készüléket. Utána szakszerűen be is szerelem.</p>
         <ul class="ticks">
           <li>${icon("check")}Segítség a készülék kiválasztásában</li>
           <li>${icon("check")}Gree és Syen klímák</li>
@@ -244,9 +242,9 @@ function services() {
       <article id="csak-telepites" class="service service-alt" aria-labelledby="szolg-2">
         <p class="service-tag">Ha már megvan a klímád</p>
         <h3 id="szolg-2">Klímaszerelés saját készülékkel</h3>
-        <p>Már megvetted a klímát? Akkor csak a telepítést kérd tőlünk. Írd meg, milyen készüléked van, és egyeztetjük a beszerelés részleteit.</p>
+        <p>Már megvetted a klímát? Akkor csak a telepítést kérd tőlem. Írd meg, milyen készüléked van, és egyeztetek veled a beszerelés részleteiről.</p>
         <ul class="ticks">
-          <li>${icon("check")}Nem kell nálunk vásárolnod</li>
+          <li>${icon("check")}Nem kell nálam vásárolnod</li>
           <li>${icon("check")}A saját készüléked szakszerű beszerelése</li>
           <li>${icon("check")}Egyeztetés a készülék adatai alapján</li>
         </ul>
@@ -269,14 +267,14 @@ function brands(site, products) {
   <div class="wrap">
     <header class="section-head">
       <h2 id="markak-cim">Gree és Syen klímák</h2>
-      <p>Ezzel a két márkával dolgozunk. Elmondod, mire van szükséged, mi pedig segítünk megtalálni a hozzád illő készüléket, és be is szereljük.</p>
+      <p>Ezzel a két márkával dolgozom. Elmondod, mire van szükséged, én pedig segítek megtalálni a hozzád illő készüléket, és be is szerelem.</p>
     </header>
     <div class="brand-grid">
-      ${panel("Gree", "brand-gree", `Gree klímát szeretnél? ${count("Gree") ? `${count("Gree")} sorozatból választhatsz, ` : ""}az otthonod és az igényeid alapján segítünk kiválasztani a megfelelőt.`, `<a class="text-link" href="klimak.html#gree">Gree klímák és árak</a>`)}
-      ${panel("Syen", "brand-syen", `Syen klíma érdekel? ${count("Syen") ? `${count("Syen")} sorozat közül ` : ""}segítünk a választásban, a beszereléssel együtt.`, `<a class="text-link" href="klimak.html#syen">Syen klímák és árak</a>`)}
+      ${panel("Gree", "brand-gree", `Gree klímát szeretnél? ${count("Gree") ? `${count("Gree")} sorozatból választhatsz, ` : ""}az otthonod és az igényeid alapján segítek kiválasztani a megfelelőt.`, `<a class="text-link" href="klimak.html#gree">Gree klímák és árak</a>`)}
+      ${panel("Syen", "brand-syen", `Syen klíma érdekel? ${count("Syen") ? `${count("Syen")} sorozat közül ` : ""}segítek a választásban, a beszereléssel együtt.`, `<a class="text-link" href="klimak.html#syen">Syen klímák és árak</a>`)}
     </div>
     ${series.length ? seriesGrid(series, site) : ""}
-    <p class="fineprint">${products.length ? `Az árak a készülékek bruttó árai, amelyekhez a felszerelési költség adódik. ${priceSourceSentence(site)}` : "A konkrét típusokról, az aktuális elérhetőségről és az árakról ajánlatkéréskor adunk tájékoztatást."} Más márkájú, saját készülék beszereléséről is érdemes egyeztetni.</p>
+    <p class="fineprint">${products.length ? `Az árak a készülékek bruttó árai, amelyekhez az <a href="#arak">alapszerelési ár</a> adódik. ${priceSourceSentence(site)}` : "A konkrét típusokról, az aktuális elérhetőségről és az árakról ajánlatkéréskor adok tájékoztatást."} Más márkájú, saját készülék beszereléséről is érdemes egyeztetni.</p>
   </div>
 </section>`;
 }
@@ -291,7 +289,7 @@ function seriesGrid(series, site) {
             <span class="series-brand">${esc(g.brand)}</span>
             <span class="series-name">${esc(g.series)}</span>
             <span class="series-meta">${g.minKw === g.maxKw ? formatKw(g.minKw) : `${formatKw(g.minKw).replace(" kW", "")}–${formatKw(g.maxKw)}`}${g.energyClass ? `, ${esc(g.energyClass)}` : ""}</span>
-            <span class="series-price"><strong>${formatFt(g.minPrice)}-tól</strong><span>+ felszerelési költség</span></span>
+            <span class="series-price"><strong>${formatFt(g.minPrice)}-tól</strong><span>+ alapszerelési ár</span></span>
           </span>
         </a>
       </li>`).join("\n      ")}
@@ -302,7 +300,7 @@ function seriesGrid(series, site) {
 function priceSourceSentence(site) {
   const pp = site.productPrices || {};
   const d = has(pp.fetchedAt) ? huDate(pp.fetchedAt) : null;
-  return `A készülékárak a gyártók magyarországi webáruházaiban közzétett árak${d ? ` (${d} állapot szerint)` : ""} (a nettó árakat ${pp.vatRate ?? 27}% áfával számoltuk bruttóra). Tájékoztató jellegűek, a végleges ár az ajánlatban szerepel.`;
+  return `A készülékárak a gyártók magyarországi webáruházaiban közzétett árak${d ? ` (${d} állapot szerint)` : ""} (a nettó árak ${pp.vatRate ?? 27}% áfával bruttósítva). Tájékoztató jellegűek, a végleges ár az ajánlatban szerepel.`;
 }
 
 function huDate(iso) {
@@ -313,17 +311,17 @@ function huDate(iso) {
 
 function installLine(site, { long = false } = {}) {
   const inst = site.installation || {};
-  if (has(inst.price)) return `+ felszerelési költség: ${esc(inst.price)}`;
-  return long ? `+ felszerelési költség: ${fill(null, "felszerelési díj")}` : "+ felszerelési költség";
+  if (has(inst.price)) return `+ alapszerelési ár: ${esc(inst.price)}`;
+  return long ? `+ alapszerelési ár: ${fill(null, "alapszerelési ár összege")}` : "+ alapszerelési ár";
 }
 
 function whyPro() {
   const items = [
-    ["tool", "Szakszerű kivitelezés", "A beszerelést a szükséges szakmai képesítéssel és engedélyekkel végezzük."],
-    ["sliders", "Az igényeidhez igazítva", "A megoldást a helyiséghez és ahhoz igazítjuk, ahogyan a klímát használni szeretnéd."],
-    ["compass", "Segítség a választásban", "Ha még nincs készüléked, segítünk eligazodni a Gree és Syen kínálatban."],
-    ["box", "Saját készülék beszerelése", "Ha a klímát máshol vetted, a telepítést akkor is kérheted tőlünk."],
-    ["chat", "Átlátható egyeztetés", "Előre átbeszéljük a részleteket, és az ajánlatban látod, mire számíthatsz."],
+    ["tool", "Szakszerű kivitelezés", "A beszerelést a szükséges szakmai képesítéssel és engedélyekkel végzem."],
+    ["sliders", "Az igényeidhez igazítva", "A megoldást a helyiséghez és ahhoz igazítom, ahogyan a klímát használni szeretnéd."],
+    ["compass", "Segítség a választásban", "Ha még nincs készüléked, segítek eligazodni a Gree és Syen kínálatban."],
+    ["box", "Saját készülék beszerelése", "Ha a klímát máshol vetted, a telepítést akkor is kérheted tőlem."],
+    ["chat", "Átlátható egyeztetés", "Előre átbeszélem veled a részleteket, és az ajánlatban látod, mire számíthatsz."],
   ];
   return `<section id="miert" class="section" aria-labelledby="miert-cim">
   <div class="wrap why-grid">
@@ -331,9 +329,6 @@ function whyPro() {
       <h2 id="miert-cim">Miért fontos a szakszerű beszerelés?</h2>
       <p>A jó készülék csak az egyik fele a történetnek. Azon, hogy a klíma megbízhatóan és hatékonyan működjön, sokat múlik a beszerelés minősége.</p>
       <p>Magyarországon a hűtőközeggel járó munkákat csak megfelelő képesítéssel rendelkező szakember végezheti.</p>
-      <figure class="why-media">
-        <img src="${unsplash(IMG.room, 800, 560)}" srcset="${srcset(IMG.room, [480, 800, 1100], 0.7)}" sizes="(min-width: 960px) 38vw, 100vw" width="800" height="560" alt="Világos, modern nappali kanapékkal" loading="lazy" decoding="async">
-      </figure>
     </div>
     <ul class="why-list">
       ${items.map(([ic, t, d]) => `<li>${icon(ic, "icon why-icon")}<div><h3>${t}</h3><p>${d}</p></div></li>`).join("\n      ")}
@@ -342,11 +337,13 @@ function whyPro() {
 </section>`;
 }
 
-function process() {
+function process(site) {
   const steps = [
     ["Kapcsolatfelvétel", "Írd meg vagy mondd el telefonon, mire van szükséged: klímát is szeretnél, vagy csak a beszerelést."],
-    ["Egyeztetés és ajánlat", "Átbeszéljük a részleteket és a lehetőségeket, majd ajánlatot adunk."],
-    ["Telepítés", "Az egyeztetett időpontban szakszerűen elvégezzük a beszerelést."],
+    site.freeSurvey
+      ? ["Ingyenes felmérés és ajánlat", "Ingyenesen felmérem a helyszínt, átbeszélem veled a lehetőségeket, majd ajánlatot adok."]
+      : ["Egyeztetés és ajánlat", "Átbeszélem veled a részleteket és a lehetőségeket, majd ajánlatot adok."],
+    ["Telepítés", "Az egyeztetett időpontban szakszerűen elvégzem a beszerelést."],
   ];
   return `<section id="menete" class="section section-ink" aria-labelledby="menete-cim">
   <div class="wrap">
@@ -363,27 +360,49 @@ function process() {
 }
 
 function prices(site) {
-  const items = (site.prices && site.prices.items) || [];
-  if (!items.length) return "";
-  return `<section id="arak" class="section" aria-labelledby="arak-cim">
-  <div class="wrap">
-    <header class="section-head">
-      <h2 id="arak-cim">Árak</h2>
-    </header>
-    <dl class="price-list">
-      ${items.map((p) => `<div class="price-row"><dt>${esc(p.service)}${has(p.note) ? `<span>${esc(p.note)}</span>` : ""}</dt><dd>${esc(p.price)}</dd></div>`).join("\n      ")}
-    </dl>
-    ${has(site.prices.footnote) ? `<p class="fineprint">${esc(site.prices.footnote)}</p>` : ""}
+  const inst = site.installation || {};
+  const includes = inst.includes || [];
+  const extras = inst.extras || [];
+  const other = (site.prices && site.prices.items) || [];
+  if (!includes.length && !extras.length && !other.length) return "";
+  const rows = (list) => list.map((p) => `<div class="price-row"><dt>${esc(p.service)}${has(p.note) ? `<span>${esc(p.note)}</span>` : ""}</dt><dd>${esc(p.price)}</dd></div>`).join("\n        ");
+  return `<section id="arak" class="section section-tint" aria-labelledby="arak-cim">
+  <div class="wrap price-grid">
+    <div class="price-main">
+      <header class="section-head">
+        <h2 id="arak-cim">Alapszerelés és árak</h2>
+        <p>A klíma ára mellé az alapszerelési ár jön. Így előre látod, mivel számolhatsz.</p>
+      </header>
+      <div class="install-card">
+        <p class="install-head"><span>Alapszerelési ár</span><strong>${has(inst.price) ? esc(inst.price) : fill(null, "alapszerelési ár összege")}</strong></p>
+        ${includes.length ? `<h3>Az alapszerelési ár tartalmazza:</h3>
+        <ul class="ticks">
+          ${includes.map((i) => `<li>${icon("check")}${esc(i)}</li>`).join("\n          ")}
+        </ul>` : ""}
+      </div>
+    </div>
+    <div class="price-side">
+      ${extras.length ? `<h3>További költségek</h3>
+      <dl class="price-list">
+        ${rows(extras)}
+      </dl>` : ""}
+      ${other.length ? `<h3>Egyéb szolgáltatás</h3>
+      <dl class="price-list">
+        ${rows(other)}
+      </dl>` : ""}
+      ${site.freeSurvey ? `<p class="survey-note">${icon("check")}A felmérés ingyenes.</p>` : ""}
+      ${has(site.prices?.footnote) ? `<p class="fineprint">${esc(site.prices.footnote)}</p>` : ""}
+    </div>
   </div>
 </section>`;
 }
 
 function faq() {
   const qa = [
-    ["Vállaltok kizárólag klímaszerelést is?", "Igen. Ha már megvan a készüléked, csak a telepítést is kérheted tőlünk, nem kell nálunk vásárolnod."],
-    ["Mi történik, ha már megvettem a klímát?", "Semmi gond. Az ajánlatkérésnél válaszd a „Csak telepítés saját készülékkel” lehetőséget, és írd meg a készülék márkáját és típusát. Ez alapján egyeztetjük a beszerelés részleteit."],
-    ["Milyen márkákkal foglalkoztok?", "Gree és Syen klímákkal dolgozunk, és segítünk kiválasztani a neked megfelelőt. Ha más márkájú készüléked van, a beszereléséről érdemes egyeztetni."],
-    ["Hogyan kérhetek ajánlatot?", "Töltsd ki az ajánlatkérő űrlapot, vagy hívj minket telefonon. Az elérhetőségeinket az oldal alján és a kapcsolat résznél is megtalálod."],
+    ["Vállalsz kizárólag klímaszerelést is?", "Igen. Ha már megvan a készüléked, csak a telepítést is kérheted tőlem, nem kell nálam vásárolnod."],
+    ["Mi történik, ha már megvettem a klímát?", "Semmi gond. Az ajánlatkérésnél válaszd a „Csak telepítés saját készülékkel” lehetőséget, és írd meg a készülék márkáját és típusát. Ez alapján egyeztetek veled a beszerelés részleteiről."],
+    ["Milyen márkákkal foglalkozol?", "Gree és Syen klímákkal dolgozom, és segítek kiválasztani a neked megfelelőt. Ha más márkájú készüléked van, a beszereléséről érdemes egyeztetni."],
+    ["Hogyan kérhetek ajánlatot?", "Töltsd ki az ajánlatkérő űrlapot, vagy hívj fel telefonon. A telefonszámomat az oldal alján és a kapcsolat résznél is megtalálod."],
     ["Mit érdemes előkészítenem az egyeztetéshez?", "Segít, ha tudod, melyik helyiségbe szeretnél klímát, nagyjából mekkora a helyiség, és hová kerülhetne a beltéri és a kültéri egység. Ha már megvan a készülék, írd meg a márkáját és a típusát. Néhány fotó a helyszínről az egyeztetésnél szintén hasznos."],
   ];
   return `<section id="gyik" class="section" aria-labelledby="gyik-cim">
@@ -406,14 +425,13 @@ function contact(site) {
   <div class="wrap contact-grid">
     <div class="contact-info">
       <h2 id="kapcsolat-cim">Kapcsolat</h2>
-      <p>Klímát szeretnél, vagy a meglévő készülékedet szerelnéd be? Hívj minket, vagy kérj ajánlatot az űrlapon.</p>
+      <p>Klímát szeretnél, vagy a meglévő készülékedet szerelnéd be? Hívj fel, vagy kérj ajánlatot az űrlapon.</p>
       ${has(site.phone) ? `<a class="call-card" href="${telHref(site.phone)}">
         ${icon("phone", "icon call-icon")}
-        <span class="call-label">Klímát szeretnél? Hívj minket:</span>
+        <span class="call-label">Klímát szeretnél? Hívj:</span>
         <span class="call-number">${esc(site.phone)}</span>
       </a>` : `<p class="call-card call-card-empty">${icon("phone", "icon call-icon")}${fill(null, "Telefonszám")}</p>`}
       <ul class="contact-list">
-        <li>${icon("mail")}<span>${has(site.email) ? `<a href="mailto:${esc(site.email)}">${esc(site.email)}</a>` : fill(null, "E-mail-cím")}</span></li>
         <li>${icon("pin")}<span>Működési terület: ${fill(site.serviceArea, "működési terület")}</span></li>
         ${hoursRows.length ? `<li>${icon("clock")}<span>${hoursRows.map((r) => `${esc(r[0])}: ${esc(r[1])}`).join("<br>")}</span></li>` : ""}
       </ul>
@@ -446,16 +464,9 @@ function contact(site) {
           </div>
         </div>
 
-        <div class="field-row">
-          <div class="field">
-            <label for="email">E-mail-cím <span class="opt">(nem kötelező)</span></label>
-            <input id="email" name="email" type="email" autocomplete="email" maxlength="120" aria-describedby="email-hiba">
-            <p class="field-error" id="email-hiba" hidden></p>
-          </div>
-          <div class="field">
-            <label for="telepules">Település <span class="opt">(nem kötelező)</span></label>
-            <input id="telepules" name="telepules" type="text" autocomplete="address-level2" maxlength="80">
-          </div>
+        <div class="field">
+          <label for="telepules">Település <span class="opt">(nem kötelező)</span></label>
+          <input id="telepules" name="telepules" type="text" autocomplete="address-level2" maxlength="80">
         </div>
 
         <div class="field">
@@ -490,12 +501,12 @@ function contact(site) {
       </form>
       <div class="form-success" hidden tabindex="-1">
         ${icon("check", "icon success-icon")}
-        <h3>Köszönjük, megkaptuk az ajánlatkérésed!</h3>
-        <p>Hamarosan felvesszük veled a kapcsolatot a megadott elérhetőségeken.</p>
+        <h3>Köszönöm, megkaptam az ajánlatkérésed!</h3>
+        <p>Hamarosan felhívlak a megadott telefonszámon.</p>
       </div>
     </div>
   </div>
-  <script type="application/json" id="contact-data">${JSON.stringify({ phone: site.phone || null, email: site.email || null })}</script>
+  <script type="application/json" id="contact-data">${JSON.stringify({ phone: site.phone || null })}</script>
 </section>`;
 }
 
@@ -509,7 +520,7 @@ export function catalog(site, products) {
     <p><a class="back-link" href="./">Vissza a főoldalra</a></p>
     <header class="section-head">
       <h1 id="klimak-cim">Klímák és árak</h1>
-      <p>Gree és Syen oldalfali split klímák bruttó áron. Az árakhoz a felszerelési költség adódik. Ha már megvan a saját készüléked, <a href="./#csak-telepites">csak a telepítést is kérheted</a>.</p>
+      <p>Gree és Syen oldalfali split klímák bruttó áron. Az árakhoz az <a href="./#arak">alapszerelési ár</a> adódik. Ha már megvan a saját készüléked, <a href="./#csak-telepites">csak a telepítést is kérheted</a>.</p>
     </header>
     <nav class="catalog-filter" aria-label="Márkák">
       ${brandsList.map((b) => `<a href="#${b.toLowerCase()}">${b}</a>`).join("")}
@@ -536,12 +547,12 @@ export function catalog(site, products) {
         </ul>
       </section>`).join("\n      ")}
     </div>`).join("\n    ")}
-    <p class="fineprint">${priceSourceSentence(site)} Készletinformációt az oldal nem tartalmaz, az elérhetőségről az egyeztetéskor tájékoztatunk.</p>
+    <p class="fineprint">${priceSourceSentence(site)} Készletinformációt az oldal nem tartalmaz, az elérhetőségről az egyeztetéskor tájékoztatlak.</p>
   </div>
 </section>`;
   return layout(site, {
     title: `Gree és Syen klímák árai | ${site.name}`,
-    description: "Gree és Syen oldalfali klímák bruttó árai és műszaki adatai. Az árakhoz a felszerelési költség adódik. Kérj ajánlatot beszereléssel együtt.",
+    description: "Gree és Syen oldalfali klímák bruttó árai és műszaki adatai. Az árakhoz az alapszerelési ár adódik. Kérj ajánlatot beszereléssel együtt.",
     path: "klimak.html",
     body,
   });
@@ -575,6 +586,7 @@ export function productPage(site, p, siblings) {
           ${p.originalGross ? `<p class="price-old"><s aria-label="Korábbi ár">${formatFt(p.originalGross)}</s></p>` : ""}
           <p class="price-now">${formatFt(p.priceGross)} <span>bruttó</span></p>
           <p class="price-install">${installLine(site, { long: true })}</p>
+          ${(site.installation?.includes || []).length ? `<details class="install-details"><summary>Mit tartalmaz az alapszerelés?</summary><ul>${site.installation.includes.map((i) => `<li>${esc(i)}</li>`).join("")}</ul><p><a href="./#arak">További költségek és árak</a></p></details>` : ""}
           ${p.priceWasNet ? `<p class="price-src">Nettó ${formatFt(p.priceNet)} + ${site.productPrices?.vatRate ?? 27}% áfa</p>` : ""}
           ${p.saleNote ? `<p class="price-src">${esc(p.saleNote)}</p>` : ""}
           <a class="btn btn-primary btn-block" href="./?klima=${prefill}#ajanlatkeres">Ajánlatot kérek erre a klímára</a>
@@ -601,7 +613,7 @@ export function productPage(site, p, siblings) {
 </section>`;
   return layout(site, {
     title: `${p.name} ára és műszaki adatai | ${site.name}`,
-    description: `${p.name}: ${formatFt(p.priceGross)} bruttó + felszerelési költség. ${p.energyClass ? `Energiaosztály: ${p.energyClass}. ` : ""}Műszaki adatok és ajánlatkérés beszereléssel.`,
+    description: `${p.name}: ${formatFt(p.priceGross)} bruttó + alapszerelési ár. ${p.energyClass ? `Energiaosztály: ${p.energyClass}. ` : ""}Műszaki adatok és ajánlatkérés beszereléssel.`,
     path: p.page,
     body,
   });
@@ -640,7 +652,7 @@ export function impresszum(site) {
       ${row(esc(l.registrationLabel || "Nyilvántartási szám"), l.registration, "Cégjegyzékszám vagy nyilvántartási szám")}
       ${row("Adószám", l.taxNumber, "Adószám")}
       ${row("Telefon", site.phone, "Telefonszám")}
-      ${row("E-mail", site.email, "E-mail-cím")}
+      ${row("E-mail", site.email, "E-mail-cím – az impresszumban a törvény szerint kötelező")}
       ${row("Működési terület", site.serviceArea, "Működési terület")}
       ${has(a.city) ? row("Cím", formatAddress(a), "Cím") : ""}
       ${row("Tárhelyszolgáltató", l.hosting, "Tárhelyszolgáltató neve, címe, elérhetősége")}
@@ -651,7 +663,7 @@ export function impresszum(site) {
 export function adatvedelem(site) {
   const sections = [
     ["Az adatkezelő", "Az adatkezelő neve, székhelye és elérhetőségei."],
-    ["A kezelt adatok köre", "Mely adatokat kezeli a vállalkozás (pl. az ajánlatkérő űrlapon megadott név, telefonszám, e-mail-cím, település, üzenet)."],
+    ["A kezelt adatok köre", "Mely adatokat kezeli a vállalkozás (pl. az ajánlatkérő űrlapon megadott név, telefonszám, település, üzenet)."],
     ["Az adatkezelés célja és jogalapja", "Mire használják az adatokat (pl. kapcsolatfelvétel, ajánlatadás), és milyen jogalapon."],
     ["Az adatok megőrzési ideje", "Mennyi ideig őrzik meg az adatokat."],
     ["Adatfeldolgozók és címzettek", "Kik férhetnek hozzá az adatokhoz (pl. tárhelyszolgáltató, e-mail-szolgáltató)."],
@@ -661,7 +673,7 @@ export function adatvedelem(site) {
   return legalPage(site, {
     title: "Adatkezelési tájékoztató",
     path: "adatvedelem.html",
-    description: `A ${site.name} adatkezelési tájékoztatója: milyen adatokat kezelünk az ajánlatkéréskor, és milyen jogaid vannak.`,
+    description: `A ${site.name} adatkezelési tájékoztatója: milyen adatokat kezel az ajánlatkéréskor, és milyen jogaid vannak.`,
     lead: "Ez az oldal még csak a tájékoztató szerkezetét mutatja, nem érvényes adatkezelési tájékoztató. Élesítés előtt a vállalkozás valós adatai alapján, lehetőleg szakember segítségével kell elkészíteni.",
     body: sections.map(([h, d]) => `<h2>${h}</h2>\n    <p class="ph-block">[Kitöltendő: ${d}]</p>`).join("\n    "),
   });
@@ -670,7 +682,7 @@ export function adatvedelem(site) {
 export function notFound(site) {
   return layout(site, {
     title: `Az oldal nem található | ${site.name}`,
-    description: "A keresett oldal nem található. Térj vissza a főoldalra, és nézd meg klímáinkat és szolgáltatásainkat.",
+    description: "A keresett oldal nem található. Térj vissza a főoldalra, és nézd meg a klímákat és a szolgáltatásokat.",
     path: "404.html",
     robots: "noindex",
     body: `<section class="section legal">

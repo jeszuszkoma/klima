@@ -39,7 +39,7 @@ npm run preview   # helyi előnézet: http://localhost:4321
 ## Adatok frissítése
 
 - **Üzleti adatok:** csak a `data/site.json`-t kell szerkeszteni. A `null` mezők az oldalon `[szögletes zárójelben]` jelennek meg.
-- **Felszerelési költség:** `installation.price` (pl. `"89 000 Ft-tól"`). Amíg üres, az oldal csak a „+ felszerelési költség” szöveget mutatja.
+- **Alapszerelési ár:** `installation.price` (pl. `"89 000 Ft"`), a tartalma `installation.includes`, a további költségek `installation.extras`. Amíg az ár üres, az oldalon kitöltendőként látszik.
 - **Klímaárak:** a `data/products-raw/*.json` fájlok a gree.hu (klimawebaruhaz.com) és a syen.hu oldaláról származnak. A dátum a `productPrices.fetchedAt` mezőben. A Gree nettó árakat a build 27% áfával bruttósítja.
 - **Árlista (szolgáltatások):** `prices.items` – ha nem üres, külön „Árak” szakasz jelenik meg a főoldalon.
 
